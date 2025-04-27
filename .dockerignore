@@ -1,0 +1,8 @@
+
+
+node_modules
+ui
+
+.env
+.DS_Store
+.vscode
