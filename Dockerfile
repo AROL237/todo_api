@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:18-alpine AS builder
+FROM node:trixie-slim AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -13,8 +13,9 @@ RUN npm install --only=production
 # Copy the application source code
 COPY . .
 
+
 # Use a lightweight Node.js image for production
-FROM node:18-alpine
+FROM node:trixie-slim
 
 # Set the working directory
 WORKDIR /app

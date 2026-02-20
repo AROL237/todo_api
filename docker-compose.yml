@@ -1,12 +1,15 @@
 services:
   database:
-    image: mysql:8-oracle
+    image: mysql:8.0-debian
+    container_name: database
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+    env_file:
+      - .env
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    #   - MYSQL_DATABASE=${MYSQL_DATABASE}
+    #   - MYSQL_USER=${MYSQL_USER}
+    #   - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - 3306:3306
     volumes:
@@ -19,30 +22,39 @@ services:
       - 5050:8080
 
   frontend:
-    image: todo_ui:0.2
+    image: todo_ui:1.0.3
+    container_name: frontend
+
     # build:
-    # context: ./ui/todo_ui
+    #   context: ./../todo_ui
     #   dockerfile: Dockerfile
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_API_BaseUrl=http://backend:${PORT}
+    # environment:
+    #   - NEXT_PUBLIC_API_BASEURL=${NEXT_PUBLIC_API_BASEURL}
+    env_file:
+      - ./../todo_ui/.env.production
     ports:
       - 3000:3000
     depends_on:
       - backend
   backend:
-    image: todo_api:0.2.2 # build: parch version with a waiting script to wait for the database to be ready
-      # context: ./server
+    # image: todo-backend:0.0.1 # build: parch version with a waiting script to wait for the database to be ready
+    container_name: backend
+    image: signing/todo_api:1.0.1
+    # build:
+    #   context: .
     #   dockerfile: Dockerfile
-    environment:
-      - PORT=8000
-      - NODE_ENV=production
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=3306
-      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+
+    env_file:
+      - ./.env
+    # environment:
+    #   - NODE_ENV=production
+    #   - PORT=8000
+    #   - MYSQL_USER=${MYSQL_USER}
+    #   - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    #   - MYSQL_DATABASE=${MYSQL_DATABASE}
+    #   - DB_HOST=${DB_HOST}
+    #   - DB_PORT=3306
+    #   - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
     ports:
       - 8000:8000
     depends_on:
@@ -50,7 +62,7 @@ services:
     restart: always
 
   nginx:
-    image: nginx:latest
+    image: nginx:stable-perl
     ports:
       - 8080:8080
     volumes:
