@@ -6,10 +6,12 @@ const cors = require("cors");
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 3000;
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : ['http://localhost:3000']; // Default to localhost if not set
 app.use(
   cors({
-    origin: [process.env.ALLOWED_ORIGINS], // Replace with your frontend URL
-  })
+
+    origin: [...allowedOrigins], // Replace with your frontend URL
+  }),
 );
 
 app.use(express.json());
@@ -35,6 +37,10 @@ app.use(express.json());
 //     }
 //   }
 // }
+
+// app.get("/", async (req, res) => {
+//   res.send("Welcome to TODO APP!");
+// });
 
 app.get("/todos", async (req, res) => {
   const query = "SELECT * FROM todos"; // Replace 'todos' with your table name
@@ -95,7 +101,7 @@ app.get(`/todo/:id`, async (req, res) => {
   }
 });
 
-//function to delete a record by id
+//function to delete a record productionby id
 app.delete(`/todo/:id`, async (req, res) => {
   const { id } = req.params;
   const query = "DELETE FROM todos WHERE id=?;";
@@ -109,7 +115,7 @@ app.delete(`/todo/:id`, async (req, res) => {
   }
 });
 
-// Start the server
+// Start the serverproduction
 const bootstrapp_applicaiton = async () => {
   app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
