@@ -1,7 +1,5 @@
 pipeline {
-    agent{
-        any
-    }
+    agent any
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         IMAGE_TAG ="${BUILD_NUMBER}"
