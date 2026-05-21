@@ -1,5 +1,7 @@
 pipeline {
-    agent { docker {image 'node:24' } }
+    agent{
+        any
+    }
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         IMAGE_TAG ="${BUILD_NUMBER}"
@@ -7,6 +9,7 @@ pipeline {
     }
     stages {
         stage('Loading version'){
+           
             steps{
                 echo 'Application version'
                 
@@ -14,6 +17,7 @@ pipeline {
             }
         }
         stage('Build') {
+           
             steps{
                 echo "building image , artifacts."
                 sh '''
