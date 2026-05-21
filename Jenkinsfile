@@ -27,7 +27,7 @@ pipeline {
                 withCredentials([usernamePassword(
                     credentialsId: 'my-docker-access-token',
                     usernameVariable: 'USER',
-                    passwordVarianle: 'PASS'
+                    passwordVariable: 'PASS'
                 )]){
                     sh '''
 
