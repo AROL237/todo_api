@@ -3,9 +3,10 @@ pipeline {
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         IMAGE_TAG ="v1.0.0"
-        NEXT_PUBLIC_API_BaseUrl =/api
+        NEXT_PUBLIC_API_BaseUrl ="/api"
     }
-    stage{
+    stages {
+        stage{
         steps("Init CICD"){
             sh''' 
             echo "$IMAGE_TAG"
@@ -17,8 +18,6 @@ pipeline {
             echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
         }
     }
-    stages {
-       
         stage('Build') {
             steps{
                 echo "building "
