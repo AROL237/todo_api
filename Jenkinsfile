@@ -7,17 +7,17 @@ pipeline {
     }
     stages {
         stage{
-        steps("Init CICD"){
-            sh''' 
-            echo "$IMAGE_TAG"
-            cat app.version
-            echo app.version >IMAGE_TAG
-            echo "$IMAGE_TAG"
+            steps('Init CICD'){
+                sh''' 
+                echo "$IMAGE_TAG"
+                cat app.version
+                echo app.version >IMAGE_TAG
+                echo "$IMAGE_TAG"
 
-            '''
-            echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
+                '''
+                echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
+            }
         }
-    }
         stage('Build') {
             steps{
                 echo "building "
