@@ -10,7 +10,6 @@ pipeline {
             steps{
                 echo 'Application version'
                 
-                echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
             }
         }
         stage('Build') {
