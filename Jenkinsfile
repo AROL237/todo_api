@@ -2,35 +2,37 @@ pipeline {
     agent { docker {image 'node:24' } }
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
-        IMAGE_TAG ="v1.0.0"
+        IMAGE_TAG =''
         NEXT_PUBLIC_API_BaseUrl ="/api"
     }
     stages {
-        stage('Init CICD'){
+        stage('Loading version'){
             steps{
-                sh''' 
-                echo "$IMAGE_TAG"
-                cat app.version
-                echo app.version >IMAGE_TAG
-                echo "$IMAGE_TAG"
-
-                '''
+               script {
+                    env.IMAGE_TAG = readFile('app.version').trim()
+                }
                 echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
             }
         }
         stage('Build') {
             steps{
-                echo "building "
+                echo "building image , artifacts."
                 sh '''
-
+                    docker build -t todo_api:'$IMAGE_TAG' .
+                    docker images 
                 '''
+            }
+        }
+        stage('Deployment'){
+            steps{
+
             }
         }
     }
     post{
         success {
             echo'SUCCESSFUL CICD'
-           archiveArtifacts artifacts: '*', fingerprint: true
+           archiveArtifacts artifacts: '**/*', fingerprint: true
         }
         always{
              echo'Clean Workspace'
