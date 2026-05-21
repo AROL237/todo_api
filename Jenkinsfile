@@ -8,6 +8,8 @@ pipeline {
     stages {
         stage('Loading version'){
             steps{
+                echo 'Application version'
+                sh 'cat app.verson'
                script {
                     env.IMAGE_TAG = readFile('app.version').trim()
                 }
@@ -25,7 +27,7 @@ pipeline {
         }
         stage('Deployment'){
             steps{
-                echo "Deploying application to production."
+                echo "Deploying application to production"
             }
         }
     }
