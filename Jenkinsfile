@@ -4,8 +4,11 @@ pipeline {
         stage('Checkout'){
             steps{
                 echo 'Pulling leatest update.'
-                ll 
-                cat .env
+              
+              sh'''  
+                    ll 
+                    cat .env
+                '''
 
             }
         }
