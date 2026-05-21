@@ -9,11 +9,10 @@ pipeline {
         stage('Loading version'){
             steps{
                 echo 'Application version'
-                sh 'cat app.version'
-                sh 'pwd'
-                sh 'ls -la'
-               script {
-                    env.IMAGE_TAG = sh(script: "cat app.version", returnStdout: true).trim()
+                 script {
+                    def version = sh(script: 'cat app.version', returnStdout: true).trim()
+                    env.IMAGE_TAG = version
+                    // echo "IMAGE_TAG = ${env.IMAGE_TAG}"
                 }
                 echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
             }
