@@ -22,14 +22,14 @@ services:
       - 5050:8080
 
   frontend:
-    image: todo_ui:1.0.3
+    image: todo_ui:1.1.1
     container_name: frontend
 
     # build:
     #   context: ./../todo_ui
     #   dockerfile: Dockerfile
-    # environment:
-    #   - NEXT_PUBLIC_API_BASEURL=${NEXT_PUBLIC_API_BASEURL}
+    environment:
+      - NEXT_PUBLIC_API_BASEURL=/api
     env_file:
       - ./../todo_ui/.env.production
     ports:
