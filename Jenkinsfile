@@ -2,7 +2,7 @@ pipeline {
     agent { docker {image 'node:24.15.0-alpine3.23' } }
     stages {
         stage('Checkout'){
-            step{
+            steps{
                 echo 'Pulling leatest update.'
                 ll 
                 cat .env
@@ -10,7 +10,7 @@ pipeline {
             }
         }
         stage('build') {
-            step{
+            steps{
                 echo "building "
                 sh '''
                 rm -rf ./node_modules
