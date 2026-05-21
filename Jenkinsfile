@@ -15,7 +15,6 @@ pipeline {
             steps{
                 echo "building "
                 sh '''
-                chown -R 111:113 "/.npm"
                 rm -rf ./node_modules
                 npm install  
             '''
@@ -31,5 +30,5 @@ pipeline {
              echo'Clean Workspace'
              cleanWs()
         }
-    }
+        }
 }
