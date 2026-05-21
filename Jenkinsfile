@@ -25,12 +25,11 @@ pipeline {
         }
         stage('PUSH IMAGE'){
             steps{
-                withCredentials([
+                withCredentials([usernamePassword(
                     credentialsId: 'my-docker-access-token',
                     usernameVariable: 'USER',
                     passwordVarianle: 'PASS'
-
-                ]){
+                )]){
                     sh '''
 
                     echo '$PASS' | docker login -u $USER --password-stdin
