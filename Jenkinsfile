@@ -16,7 +16,7 @@ pipeline {
                 echo "building "
                 sh '''
                 rm -rf ./node_modules
-                sudo npm install  
+                npm install  
             '''
             }
         }
