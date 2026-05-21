@@ -19,7 +19,7 @@ pipeline {
             steps{
                 echo "building image , artifacts."
                 sh '''
-                    docker build -t todo_api:'$IMAGE_TAG' .
+                    docker build -t todo_api:"${IMAGE_TAG}" .
                     docker images 
                 '''
             }
