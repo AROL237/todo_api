@@ -6,7 +6,6 @@ pipeline {
                 echo 'Pulling leatest update.'
               
               sh'''  
-                    ll 
                     cat .env
                 '''
 
