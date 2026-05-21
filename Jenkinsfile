@@ -10,15 +10,14 @@ pipeline {
             }
         }
         stage('build') {
-         step{
-            echo "building "
-            sh '''
-            rm -rf ./node_modules
-            npm install  
-           '''
-         }
+            step{
+                echo "building "
+                sh '''
+                rm -rf ./node_modules
+                npm install  
+            '''
+            }
         }
-        stage()
     }
     post{
         success {
