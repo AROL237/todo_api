@@ -1,11 +1,6 @@
 pipeline {
     agent { docker {image 'node:24' } }
     stages {
-        stage('Clean Workspace') {
-                steps {
-                    cleanWs()
-            }
-        }
         stage('Checkout'){
             steps{
                 echo 'Pulling leatest update.'
@@ -31,6 +26,10 @@ pipeline {
         success {
             sh 'SUCCESSFUL CICD'
            archiveArtifacts artifacts: '*', fingerprint: true
+        }
+        always{
+             echo'Clean Workspace'
+             cleanWs()
         }
     }
 }
