@@ -3,7 +3,6 @@ pipeline {
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         NEXT_PUBLIC_API_BaseUrl ="/api"
-        DOCKER_CRED =credentials('docker-access-token')
     }
     stages {
         stage('Loading version'){
