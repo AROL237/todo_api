@@ -6,8 +6,8 @@ pipeline {
         NEXT_PUBLIC_API_BaseUrl ="/api"
     }
     stages {
-        stage{
-            steps('Init CICD'){
+        stage('Init CICD'){
+            steps{
                 sh''' 
                 echo "$IMAGE_TAG"
                 cat app.version
