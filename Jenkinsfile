@@ -1,12 +1,12 @@
 pipeline {
     agent { docker {image 'node:24' } }
     stages {
-        stage('Checkout'){
-            stage('Clean Workspace') {
+        stage('Clean Workspace') {
                 steps {
                     cleanWs()
             }
-}
+        }
+        stage('Checkout'){
             steps{
                 echo 'Pulling leatest update.'
               
