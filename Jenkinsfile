@@ -1,5 +1,8 @@
 pipeline {
     agent { docker {image 'node:24' } }
+    environment {
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+    }
     stages {
         stage('Checkout'){
             steps{
@@ -16,7 +19,7 @@ pipeline {
                 echo "building "
                 sh '''
                 rm -rf ./node_modules
-                npm install  
+                npm ci --force
             '''
             }
         }
