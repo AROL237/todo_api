@@ -2,31 +2,35 @@ pipeline {
     agent { docker {image 'node:24' } }
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+        IMAGE_TAG ="v1.0.0"
+        NEXT_PUBLIC_API_BaseUrl =/api
+    }
+    stage{
+        steps("Init CICD"){
+            sh''' 
+            echo "$IMAGE_TAG"
+            cat app.version
+            echo app.version >IMAGE_TAG
+            echo "$IMAGE_TAG"
+
+            '''
+            echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
+        }
     }
     stages {
-        stage('Checkout'){
-            steps{
-                echo 'Pulling leatest update.'
-              
-              sh''' 
-                    cat .env
-                '''
-
-            }
-        }
-        stage('build') {
+       
+        stage('Build') {
             steps{
                 echo "building "
                 sh '''
-                rm -rf ./node_modules
-                npm ci --force
-            '''
+
+                '''
             }
         }
     }
     post{
         success {
-            sh 'SUCCESSFUL CICD'
+            echo'SUCCESSFUL CICD'
            archiveArtifacts artifacts: '*', fingerprint: true
         }
         always{
