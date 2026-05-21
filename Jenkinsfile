@@ -9,7 +9,7 @@ pipeline {
         stage('Loading version'){
             steps{
                 echo 'Application version'
-                sh 'cat app.verson'
+                sh 'cat app.version'
                script {
                     env.IMAGE_TAG = readFile('app.version').trim()
                 }
