@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
-        IMAGE_TAG ="${BUILD_NUMBER}"
         NEXT_PUBLIC_API_BaseUrl ="/api"
+        DOCKER_CRED =credentials('docker-access-token')
     }
     stages {
         stage('Loading version'){
@@ -19,14 +19,32 @@ pipeline {
             steps{
                 echo "building image , artifacts."
                 sh '''
-                    docker build -t todo_api:"${IMAGE_TAG}" .
+                    docker build -t todo_api:"${BUILD_NUMBER}" .
                     docker images 
                 '''
+            }
+        }
+        stage('PUSH IMAGE'){
+            steps{
+                withCredentials([
+                    credentialsId: 'my-docker-access-token',
+                    usernameVariable: 'USER',
+                    passwordVarianle: 'PASS'
+
+                ]){
+                    sh '''
+
+                    echo '$PASS' | docker login -u $USER --password-stdin
+                    docker tag  todo_api:"${BUILD_NUMBER}" $USER/todo_api:$(cat app.version)
+                    docker images
+                    '''
+                }
             }
         }
         stage('Deployment'){
             steps{
                 echo "Deploying application to production"
+                
             }
         }
     }
