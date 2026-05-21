@@ -10,6 +10,8 @@ pipeline {
             steps{
                 echo 'Application version'
                 sh 'cat app.version'
+                sh 'pwd'
+                sh 'ls -la'
                script {
                     env.IMAGE_TAG = sh(script: "cat app.version", returnStdout: true).trim()
                 }
