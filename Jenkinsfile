@@ -5,7 +5,7 @@ pipeline {
             steps{
                 echo 'Pulling leatest update.'
               
-              sh'''  
+              sh''' 
                     cat .env
                 '''
 
@@ -16,7 +16,7 @@ pipeline {
                 echo "building "
                 sh '''
                 rm -rf ./node_modules
-                npm install  
+                sudo npm install  
             '''
             }
         }
