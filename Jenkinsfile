@@ -11,7 +11,7 @@ pipeline {
                 echo 'Application version'
                 sh 'cat app.version'
                script {
-                    env.IMAGE_TAG = readFile('app.version').trim()
+                    env.IMAGE_TAG = sh(script: "cat app.version", returnStdout: true).trim()
                 }
                 echo "---IMAGE_VERSION: ${IMAGE_TAG}---" 
             }
