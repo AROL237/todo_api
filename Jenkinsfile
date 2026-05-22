@@ -7,18 +7,19 @@ pipeline {
         IMAGE_TAG = "1.0.${BUILD_NUMBER}"
     }
     stages {
+        stage('Checkout'){
+            steps{
+                checkout(scm: git(url: 'https://github.com/AROL237/todo_api',branch: 'master'))
+            }
+        }
         stage('Build') {
            
             steps{
                 echo "building image , artifacts."
-               def newImage = docker.build("$IMAGE_NAME:$IMAGE_TAG")
-
+               def newImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
                sh 'docker images'
-
-
             }
         }
-  
         }
         stage('Deployment'){
             steps{
