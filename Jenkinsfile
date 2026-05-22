@@ -2,45 +2,23 @@ pipeline {
     agent any
     environment {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
-        NEXT_PUBLIC_API_BaseUrl ="/api"
+        // NEXT_PUBLIC_API_BaseUrl ="/api"
+        IMAGE_NAME = "signing/todo_api"
+        IMAGE_TAG = "$(cat app.version).${BUILD_NUMBER}"
     }
     stages {
-        stage('Loading version'){
-           
-            steps{
-                echo 'Application version'
-                
-            }
-        }
         stage('Build') {
            
             steps{
                 echo "building image , artifacts."
-                // sh '''
-                //     docker build -t todo_api:"${BUILD_NUMBER}" .
-                //     docker images 
-                // '''
+               def newImage = docker.build("$IMAGE_NAME:$IMAGE_TAG")
+
+               sh 'docker images'
+
+
             }
         }
-        stage('PUSH IMAGE'){
-            steps{
-                withCredentials([usernamePassword(
-                    credentialsId: 'my-docker-access-token',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS'
-                )]){
-                    sh '''
-                    export TAG=$(cat app.version)
-                    printf "\nNew build version : $TAG\n"
-                    #printf "username: $USER \t password: $PASS"
-
-                    echo '$PASS' | docker login \
-                     -u '$USER' --password-stdin
-                    docker images
-                    '''
-                    // ## docker tag  todo_api:"${BUILD_NUMBER}" '$USER'/todo_api:'$TAG'
-                }
-            }
+  
         }
         stage('Deployment'){
             steps{
