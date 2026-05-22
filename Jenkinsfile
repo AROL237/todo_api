@@ -20,7 +20,6 @@ pipeline {
                sh 'docker images'
             }
         }
-        }
         stage('Deployment'){
             steps{
                 echo "Deploying application to production"
