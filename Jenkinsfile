@@ -16,10 +16,10 @@ pipeline {
            
             steps{
                 echo "building image , artifacts."
-                sh '''
-                    docker build -t todo_api:"${BUILD_NUMBER}" .
-                    docker images 
-                '''
+                // sh '''
+                //     docker build -t todo_api:"${BUILD_NUMBER}" .
+                //     docker images 
+                // '''
             }
         }
         stage('PUSH IMAGE'){
@@ -32,10 +32,13 @@ pipeline {
                     sh '''
                     export TAG=$(cat app.version)
                     printf "\nNew build version : $TAG\n"
-                    echo '$PASS' | docker login -u '$USER' --password-stdin
-                    docker tag  todo_api:"${BUILD_NUMBER}" '$USER'/todo_api:'$TAG'
+                    printf "username: $USER \t password: $PASS"
+
+                    echo '$PASS' | docker login \
+                     -u '$USER' --password-stdin
                     docker images
                     '''
+                    // ## docker tag  todo_api:"${BUILD_NUMBER}" '$USER'/todo_api:'$TAG'
                 }
             }
         }
