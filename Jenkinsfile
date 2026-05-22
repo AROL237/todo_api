@@ -4,7 +4,7 @@ pipeline {
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         // NEXT_PUBLIC_API_BaseUrl ="/api"
         IMAGE_NAME = "signing/todo_api"
-        IMAGE_TAG = "$(cat app.version).${BUILD_NUMBER}"
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
     }
     stages {
         stage('Build') {
