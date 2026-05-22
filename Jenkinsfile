@@ -32,7 +32,7 @@ pipeline {
                     sh '''
                     export TAG=$(cat app.version)
                     printf "\nNew build version : $TAG\n"
-                    printf "username: $USER \t password: $PASS"
+                    #printf "username: $USER \t password: $PASS"
 
                     echo '$PASS' | docker login \
                      -u '$USER' --password-stdin
