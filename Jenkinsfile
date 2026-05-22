@@ -30,9 +30,10 @@ pipeline {
                     passwordVariable: 'PASS'
                 )]){
                     sh '''
-
-                    echo '$PASS' | docker login -u $USER --password-stdin
-                    docker tag  todo_api:"${BUILD_NUMBER}" $USER/todo_api:$(cat app.version)
+                    export TAG=$(cat app.version)
+                    printf "\nNew build version : $TAG\n"
+                    echo '$PASS' | docker login -u '$USER' --password-stdin
+                    docker tag  todo_api:"${BUILD_NUMBER}" '$USER'/todo_api:'$TAG'
                     docker images
                     '''
                 }
