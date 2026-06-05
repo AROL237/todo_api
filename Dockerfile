@@ -11,7 +11,8 @@ COPY package*.json ./
 RUN npm install --only=production
 
 # Copy the application source code
-COPY . .
+COPY index.js db.js /app/
+
 
 
 # Use a lightweight Node.js image for production

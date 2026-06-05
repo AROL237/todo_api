@@ -2,47 +2,35 @@ const express = require("express");
 const { db } = require("./db");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const promBundle = require("express-prom-bundle");
+
+const metricsMiddleware = promBundle({
+  includeMethod: true,
+  includePath: true,
+  customLabels: { project_name: "TODO APP" },
+  
+});
 
 const app = express();
 dotenv.config();
+
+// Maticx for monitoring
+app.use(metricsMiddleware);
+
 const PORT = process.env.PORT || 3000;
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : ['http://localhost:3000']; // Default to localhost if not set
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:3000"]; // Default to localhost if not set
 app.use(
   cors({
-
     origin: [...allowedOrigins], // Replace with your frontend URL
   }),
 );
 
 app.use(express.json());
 
-// Create a connection to the MySQL database
-// async function waitForDatabase() {
-//   while (true) {
-//     try {
-//       // Connect to the database
-//       db = await mysql.createConnection({
-//         host: process.env.DB_HOST, // Replace with your MySQL host
-//         user: process.env.DB_USER, // Replace with your MySQL username
-//         password: process.env.DB_PASSWORD, // Replace with your MySQL password
-//         database: process.env.DB_NAME, // Replace with your database name
-//       });
-//       await db.end();
-//       console.log("✅ MySQL is ready!");
-
-//       break;
-//     } catch (err) {
-//       console.log("⏳ Waiting for MySQL...");
-//       await new Promise((res) => setTimeout(res, 1000));
-//     }
-//   }
-// }
-
-// app.get("/", async (req, res) => {
-//   res.send("Welcome to TODO APP!");
-// });
-
 app.get("/todos", async (req, res) => {
+  
   const query = "SELECT * FROM todos"; // Replace 'todos' with your table name
   try {
     const result = await db.query(query);

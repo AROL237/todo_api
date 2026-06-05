@@ -4,7 +4,7 @@ services:
     container_name: database
     restart: always
     env_file:
-      - .env
+      - .env.docker
     # environment:
     #   - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     #   - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -22,7 +22,7 @@ services:
       - 5050:8080
 
   frontend:
-    image: todo_ui:1.1.1
+    image: signing/todo_ui:3.0.1
     container_name: frontend
 
     # build:
@@ -45,7 +45,7 @@ services:
     #   dockerfile: Dockerfile
 
     env_file:
-      - ./.env
+      - ./.env.docker
     # environment:
     #   - NODE_ENV=production
     #   - PORT=8000

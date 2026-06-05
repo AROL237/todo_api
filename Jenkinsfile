@@ -1,40 +1,51 @@
+
 pipeline {
     agent any
-    environment {
-        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
-        // NEXT_PUBLIC_API_BaseUrl ="/api"
-        IMAGE_NAME = "signing/todo_api"
-        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
+    environment{
+        IMAGE_NAME ="signing/todo_api"
+        IMAGE_TAG ="1.0.${BUILD_NUMBER}"
     }
-    stages {
-        stage('Checkout'){
+    stages{
+        stage("CHECKOUT"){
             steps{
-                checkout(scm: git(url: 'https://github.com/AROL237/todo_api',branch: 'master'))
-            }
+                echo "====++++ Executing CHECKOUT ++++===="
+                checkout scm
+            }        
         }
-        stage('Build') {
-           
+         stage("BUILD"){
             steps{
-                echo "building image , artifacts."
-               def newImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-               sh 'docker images'
-            }
+                echo "====++++ Executing BUILD ++++===="` 
+                sh '''
+                    docker --version
+                    docker build -t "$IMAGE_NAME":"$IMAGE_TAG" .
+                    docker images   
+                '''
+            }        
         }
-        stage('Deployment'){
-            steps{
-                echo "Deploying application to production"
-                
+        stage('SAVING ARTIFACT'){
+            echo "====++++ Saving Artifact build to registry ++++===="
+            script{
+                dockerR
             }
+            
+        }
+
+         stage("DEPLOYING TO ENVIRONMENT"){
+            steps{
+                echo "====++++ Executing DEPLOYMENT  ++++===="
+            }        
         }
     }
-    post{
-        success {
-            echo'SUCCESSFUL CICD'
-           archiveArtifacts artifacts: '**/*', fingerprint: true
-        }
+   post{
+     
+       success{
+           echo "====++++ Only when successful ++++===="
+       }
+       failure{
+           echo "====++++ Only when failed ++++===="
+       }
         always{
-             echo'Clean Workspace'
-             cleanWs()
-        }
-        }
+           echo "====++++ Always ++++===="
+       }
+    }
 }
