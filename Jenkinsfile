@@ -1,6 +1,9 @@
 
 pipeline {
-    agent any
+<<<<<<< HEAD
+    agent { node { label 'docker' } }
+
+  
     environment{
         IMAGE_NAME ="signing/todo_api"
         IMAGE_TAG ="1.0.${BUILD_NUMBER}"
@@ -26,9 +29,8 @@ pipeline {
             echo "====++++ Saving Artifact build to registry ++++===="
             script{
                 dockerR
+>>>>>>> b722a2a1b876858463d30ac54614ffee19db947c
             }
-            
-        }
 
          stage("DEPLOYING TO ENVIRONMENT"){
             steps{
@@ -36,6 +38,9 @@ pipeline {
             }        
         }
     }
+            
+        }
+
    post{
      
        success{
