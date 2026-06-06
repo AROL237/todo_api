@@ -33,10 +33,18 @@ pipeline {
             agent { node { label 'docker' } }
             steps{
                 echo "====++++ Saving Artifact build to registry ++++===="
+
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-cred'
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]){
                 sh '''
-                    docker push ${IMAGE_NAME}:${IMAGE_TAG} > logs.txt
+                    echo $PASS | docker login -u $USER --password-stdin >logs.txt
+
+                    docker push ${IMAGE_NAME}:${IMAGE_TAG} >> logs.txt
                     cat logs.txt
-                '''
+                '''}
 
             }
         }
@@ -47,9 +55,9 @@ pipeline {
             steps{
                 echo "====++++ Executing DEPLOYMENT  ++++===="
                 sh '''
-                    helm upgrade --install totoapp ./todoapp -f ./todoapp/values.yaml -f ./value-secret.yml --set backend.image.tag=${IMAGE_TAG}
+                    helm upgrade --install totoapp ./todoapp -f ./todoapp/values.yaml -f /home/jenkins/value-secret.yml --set backend.image.tag=${IMAGE_TAG}
                     printf "\n application deployed to KUBERNETES!!!!\n"
-                    helm list  -A >depl-logs.txt
+                    helm list  -A > depl-logs.txt
 
                 '''
             }        
