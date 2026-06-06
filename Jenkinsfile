@@ -11,7 +11,7 @@ pipeline {
             agent { node { label 'docker' } }
 
             steps{
-                echo "====++++ checkout code ++++===="` 
+                echo "====++++ checkout code ++++====" 
                 checkout scm
                 echo "checkout completed."
                 sh 'ls -l '
@@ -21,7 +21,7 @@ pipeline {
             agent { node { label 'docker' } }
 
             steps{
-                echo "====++++ Executing BUILD ++++===="` 
+                echo "====++++ Executing BUILD ++++===="
                 sh '''
                     docker --version
                     docker build -t "$IMAGE_NAME":"$IMAGE_TAG" .
@@ -53,7 +53,7 @@ pipeline {
                         --set backend.image.tag=${IMAGE_TAG}
                     printf "\n application deployed to KUBERNETES!!!!\n"
                     helm list  -A >depl-logs.txt
-                    
+
                 '''
             }        
         }
