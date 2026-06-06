@@ -47,10 +47,7 @@ pipeline {
             steps{
                 echo "====++++ Executing DEPLOYMENT  ++++===="
                 sh '''
-                    helm upgrade --install totoapp ./todoapp \ 
-                        -f ./todoapp/values.yaml    \
-                        -f ./value-secret.yml   \
-                        --set backend.image.tag=${IMAGE_TAG}
+                    helm upgrade --install totoapp ./todoapp -f ./todoapp/values.yaml -f ./value-secret.yml --set backend.image.tag=${IMAGE_TAG}
                     printf "\n application deployed to KUBERNETES!!!!\n"
                     helm list  -A >depl-logs.txt
 
