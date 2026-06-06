@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reverse-proxy
+  labels:
+    app: reverse-proxy
+spec:
+  replicas: {{ .Values.nginxServer.replicaCount }}
+  selector:
+    matchLabels:
+      app: reverse-proxy
+  template:
+    metadata:
+      name: reverse-proxy
+      labels:
+        app: reverse-proxy
+    spec:
+      containers:
+        - name: reverse-proxy-app
+          image: "{{.Values.nginxServer.image.repository}}:{{.Values.nginxServer.image.tag}}"
+          pullPolicy: {{.Values.nginxServer.image.pullPolicy}}
+          envFrom:
+            - secretRef:
+                name: app-secret
+            - configMapRef:
+                name: app-config
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              readOnly: true
+          ports:
+            - name: reverse-proxy
+              containerPort: 80
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reverse-proxy-service
+spec:
+  selector:
+    app: reverse-proxy
+  ports:
+    - name: reverse-proxy
+      port: {{ .Values.nginxServer.port}}
+      targetPort: reverse-proxy

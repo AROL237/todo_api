@@ -1,21 +1,25 @@
 
 pipeline {
-<<<<<<< HEAD
     agent { node { label 'docker' } }
-
-  
     environment{
         IMAGE_NAME ="signing/todo_api"
-        IMAGE_TAG ="1.0.${BUILD_NUMBER}"
+        IMAGE_TAG ="1.0.${BUILD_ID}"
     }
     stages{
-        stage("CHECKOUT"){
+        
+        stage("checkout"){
+            agent { node { label 'docker' } }
+
             steps{
-                echo "====++++ Executing CHECKOUT ++++===="
+                echo "====++++ checkout code ++++===="` 
                 checkout scm
+                echo "checkout completed."
+                sh 'ls -l '
             }        
         }
-         stage("BUILD"){
+        stage("BUILD"){
+            agent { node { label 'docker' } }
+
             steps{
                 echo "====++++ Executing BUILD ++++===="` 
                 sh '''
@@ -26,31 +30,32 @@ pipeline {
             }        
         }
         stage('SAVING ARTIFACT'){
-            echo "====++++ Saving Artifact build to registry ++++===="
-            script{
-                dockerR
->>>>>>> b722a2a1b876858463d30ac54614ffee19db947c
-            }
+            agent { node { label 'docker' } }
+            steps{
+                echo "====++++ Saving Artifact build to registry ++++===="
+                sh '''
+                    docker push ${IMAGE_NAME}:${IMAGE_TAG} > logs.txt
+                    cat logs.txt
+                '''
 
-         stage("DEPLOYING TO ENVIRONMENT"){
+            }
+        }
+           
+        stage("DEPLOYING TO ENVIRONMENT"){
+            agent { node { label 'docker' } }
+
             steps{
                 echo "====++++ Executing DEPLOYMENT  ++++===="
+                sh '''
+                    helm upgrade --install totoapp ./todoapp \ 
+                        -f ./todoapp/values.yaml    \
+                        -f ./value-secret.yml   \
+                        --set backend.image.tag=${IMAGE_TAG}
+                    printf "\n application deployed to KUBERNETES!!!!\n"
+                    helm list  -A >depl-logs.txt
+                    
+                '''
             }        
         }
-    }
-            
-        }
-
-   post{
-     
-       success{
-           echo "====++++ Only when successful ++++===="
-       }
-       failure{
-           echo "====++++ Only when failed ++++===="
-       }
-        always{
-           echo "====++++ Always ++++===="
-       }
     }
 }

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: default # optional
+data:
+  PORT: "8000"
+  DB_HOST: host.docker.internal
+  MYSQL_PORT: "3306"
+  MYSQL_DATABASE: tododb
+  NEXT_PUBLIC_BASEURL: "/api"
