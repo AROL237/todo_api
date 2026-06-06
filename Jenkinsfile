@@ -35,7 +35,7 @@ pipeline {
                 echo "====++++ Saving Artifact build to registry ++++===="
 
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-cred'
+                    credentialsId: 'dockerhub-cred',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]){
